@@ -141,3 +141,23 @@ exports.findAllPublished = (req, res) => {
       });
     });
 };
+
+// Create and Save document
+exports.create = async (req, res) => {
+  // Validate request
+  if (!req.body.title) {
+    res.status(400).send({ message: "Content can not be empty!" });
+    return;
+  }
+
+  // Create a Tutorial
+  try {
+    const { title, content } = req.body;
+    const document = new Document({ title, content });
+    await document.save();
+    res.status(201).json(document);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
